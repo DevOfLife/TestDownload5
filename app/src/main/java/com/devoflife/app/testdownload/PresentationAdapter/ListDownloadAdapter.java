@@ -104,7 +104,6 @@ public class ListDownloadAdapter extends RecyclerView.Adapter<ListDownloadAdapte
                 Log.e("aaaa", "aaaa:"+requestInfo.getStatus());
                 Log.e("aaaa", "aaaa:"+requestInfo.getError());
                 toDownload.setDownloadId(mFetchDownloader.enqueue(request));
-
             }
         });
     }
