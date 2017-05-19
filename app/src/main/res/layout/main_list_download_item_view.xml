@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/main_list_download_item_height"
+    tools:context="com.devoflife.app.testdownload.Presentation.MainActivity">
+
+    <android.support.percent.PercentRelativeLayout
+        android:layout_width="@dimen/main_list_download_item_height"
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/download_item_icon"
+            android:src="@drawable/download_file_icon"
+            android:scaleType="centerCrop"
+            android:layout_centerInParent="true"
+            app:layout_widthPercent="70%"
+            app:layout_heightPercent="70%"
+            tools:ignore="ContentDescription" />
+    </android.support.percent.PercentRelativeLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/download_item_file_name"
+            android:textSize="@dimen/download_item_file_name_size"
+            android:gravity="center_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar
+            android:id="@+id/download_item_progress_bar"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            app:rcProgress="0"
+            app:rcSecondaryProgress="0"
+            app:rcMax="100"
+            app:rcRadius="2dp"
+            app:rcBackgroundPadding="1dp"
+            app:rcReverse="false"
+            app:rcProgressColor="@color/download_progress_bar_primary"
+            app:rcSecondaryProgressColor="@color/download_progress_bar_primary"
+            app:rcBackgroundColor="@color/download_progress_bar_bg" />
+
+        <TextView
+            android:id="@+id/download_item_state_text"
+            android:textSize="@dimen/download_item_state_text_size"
+            android:gravity="center_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</LinearLayout>
