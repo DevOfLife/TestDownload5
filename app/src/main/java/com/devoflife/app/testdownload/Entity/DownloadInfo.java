@@ -53,6 +53,10 @@ public class DownloadInfo {
                 return "Downloading";
             case Fetch.STATUS_DONE:
                 return "Complete";
+            case Fetch.STATUS_ERROR:
+                return "Error";
+            case Fetch.STATUS_REMOVED:
+                return "Removed";
         }
 
         return "Pending...";

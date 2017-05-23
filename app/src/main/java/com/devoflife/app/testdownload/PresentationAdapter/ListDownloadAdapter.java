@@ -62,9 +62,13 @@ public class ListDownloadAdapter extends RecyclerView.Adapter<ListDownloadAdapte
                 for(DownloadInfo toDownload : mListDownloadInfo){
                     if(toDownload.getDownloadId() == id) { // && status == Fetch.STATUS_DOWNLOADING
                         toDownload.setState(status);
-                        if(status == Fetch.STATUS_DOWNLOADING
-                                || status == Fetch.STATUS_DONE) {
-                            toDownload.setProgress(progress);
+                        switch (status){
+                            case Fetch.STATUS_DOWNLOADING:
+                            case Fetch.STATUS_DONE:
+                                toDownload.setProgress(progress);
+                                break;
+                            case Fetch.STATUS_REMOVED:
+                                break;
                         }
                     }
                 }
@@ -96,14 +100,28 @@ public class ListDownloadAdapter extends RecyclerView.Adapter<ListDownloadAdapte
         holder.mIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DownloadInfo toDownload= mListDownloadInfo.get(holder.getAdapterPosition());
-                Request request = new Request(toDownload.getUrl()
+                final DownloadInfo toDownload= mListDownloadInfo.get(holder.getAdapterPosition());
+                final Request request = new Request(toDownload.getUrl()
                         , Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath()
-                        ,toDownload.getFileName());
-                RequestInfo requestInfo = mFetchDownloader.get(request);
+                        , toDownload.getFileName());
+                final RequestInfo requestInfo = mFetchDownloader.get(request);
                 Log.e("aaaa", "aaaa:"+requestInfo.getStatus());
                 Log.e("aaaa", "aaaa:"+requestInfo.getError());
-                toDownload.setDownloadId(mFetchDownloader.enqueue(request));
+                if(requestInfo != null && requestInfo.getError() == Fetch.ERROR_FILE_NOT_FOUND) {
+                    mFetchDownloader.addFetchListener(new FetchListener() {
+                        @Override
+                        public void onUpdate(long id, int status, int progress, long downloadedBytes, long fileSize, int error) {
+                            if(id == requestInfo.getId() && status == Fetch.STATUS_REMOVED) {
+                                toDownload.setDownloadId(mFetchDownloader.enqueue(request));
+                                mFetchDownloader.removeFetchListener(this);
+                            }
+                        }
+                    });
+
+                    mFetchDownloader.remove(requestInfo.getId());
+                }else {
+                    toDownload.setDownloadId(mFetchDownloader.enqueue(request));
+                }
             }
         });
     }
